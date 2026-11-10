@@ -94,7 +94,7 @@ git commit -m "feat(sync): enable Spaces sidebar sync by default on all builds"
 - Consumes: `zenSyncWorkspaces` → `services.sync.engine.spaces`; `zenSyncNormalTabs` → `zen.spaces-sync.normal-tabs` (visible when workspaces sync on)
 - Produces: Unchanged Sync pane behavior with Arc-clear labels
 
-- [ ] **Step 1: Verify Sync pane already exposes sidebar sync**
+- [x] **Step 1: Verify Sync pane already exposes sidebar sync**
 
 Confirm `account-sync-mjs.patch` registers:
 
@@ -111,11 +111,11 @@ zen-settings-normal-tabs-sync =
     .label = Include unpinned tabs
 ```
 
-- [ ] **Step 2: Only edit copy if needed**
+- [x] **Step 2: Only edit copy if needed**
 
-If description does not mention folders/pinned clearly, tighten `.description` only in `locales/en-US/.../zen-preferences.ftl`. Do **not** change other locales in this task (Crowdin owns them).
+Verified en-US copy already matches Arc-style wording; no string edits required.
 
-- [ ] **Step 3: Commit only if strings changed; otherwise note “no code change” in the session log**
+- [x] **Step 3: Commit only if strings changed; otherwise note “no code change” in the session log**
 
 ```bash
 git add locales/en-US/browser/browser/preferences/zen-preferences.ftl
@@ -135,23 +135,15 @@ git commit -m "chore(sync): clarify Arc-style sidebar sync settings copy"
 - Consumes: `zen.spaces-sync.first-sync-animation-shown`, `win.gZenStartup.playWindowSweepAnimation()`
 - Produces: Same one-shot gate, plus a user-visible confirmation that sidebar sync is active
 
-- [ ] **Step 1: Find existing toast / notification helper used by Spaces**
+- [x] **Step 1: Find existing toast / notification helper used by Spaces**
 
-Search for toast patterns near Spaces (e.g. space-routing toast `zen-space-routing-tab-routed-toast`) and reuse that mechanism.
+Reused `gZenUIManager.showToast`.
 
-- [ ] **Step 2: Add Fluent string (en-US only)**
+- [x] **Step 2: Add Fluent string (en-US only)**
 
-Example (adjust id to match chosen ftl file):
+- [x] **Step 3: Show toast once alongside the existing sweep animation**
 
-```
-zen-spaces-sync-enabled-toast = Your sidebar is syncing across devices
-```
-
-- [ ] **Step 3: Show toast once alongside the existing sweep animation**
-
-In `#maybePlayFirstSyncAnimation(win)` after setting the pref / playing animation, fire the same style of confirmation toast used elsewhere in Zen. Keep the pref gate so it only runs once per profile.
-
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/zen/sync/ZenSpacesSyncApplier.sys.mjs locales/en-US/browser/browser/*.ftl
@@ -171,39 +163,15 @@ git commit -m "feat(sync): confirm first Spaces sidebar sync with a toast"
 - Consumes: `Services.prefs`, existing `ZenSpacesSyncModel` / `ZenSpacesSyncApplier` test helpers in `head.js`
 - Produces: Automated proof that unpinned sync stays off by default and structure records still apply
 
-- [ ] **Step 1: Add a test that normal-tabs pref defaults off and pinned apply still works**
+- [x] **Step 1: Add a test that normal-tabs pref defaults off and pinned apply still works**
 
-In a new `browser_engine_default.js` (pattern from `browser_normal_tabs_apply.js`):
+- [x] **Step 2: Register the test in `browser.toml`**
 
-```js
-add_task(async function test_normal_tabs_pref_default_off() {
-  Assert.equal(
-    Services.prefs.getBoolPref("zen.spaces-sync.normal-tabs", true),
-    false,
-    "unpinned tab sync stays opt-in"
-  );
-});
+- [x] **Step 3: Run device_sync tests if mach/engine available**
 
-add_task(async function test_pinned_tab_still_applies() {
-  // reuse tabRecord(..., { pinned: true }) helper from head.js
-  // applyBatch → assert tab exists / pinned
-});
-```
+Engine not present in this workspace; deferred to CI / Windows verification.
 
-- [ ] **Step 2: Register the test in `browser.toml`**
-
-Add the new file to the manifest alongside existing device_sync tests.
-
-- [ ] **Step 3: Run device_sync tests if mach/engine available**
-
-```bash
-# from repo with engine present:
-cd engine && ./mach test zen/tests/device_sync
-```
-
-If engine is not present in this workspace, run whatever subset is available or document deferred CI verification (Windows CI / local Windows build).
-
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/zen/tests/device_sync/
