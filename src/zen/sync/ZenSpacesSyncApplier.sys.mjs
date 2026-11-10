@@ -199,8 +199,9 @@ class nsZenSpacesSyncApplier {
   }
 
   /**
-   * Plays the update sweep animation over the window the first time
-   * incoming sync data lands on this profile.
+   * Plays the update sweep animation and a confirmation toast the first
+   * time incoming sync data lands on this profile (Arc-style "sidebar is
+   * shared" feedback).
    *
    * @param {Window} win
    */
@@ -210,6 +211,7 @@ class nsZenSpacesSyncApplier {
     }
     Services.prefs.setBoolPref(FIRST_SYNC_ANIMATION_PREF, true);
     win.gZenStartup.playWindowSweepAnimation();
+    win.gZenUIManager?.showToast("zen-spaces-sync-enabled-toast");
   }
 
   /**

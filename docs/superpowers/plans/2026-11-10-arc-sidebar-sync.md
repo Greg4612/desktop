@@ -40,11 +40,11 @@
 - Consumes: ffprefs `@cond` / `@IS_TWILIGHT@` semantics in `tools/ffprefs/src/main.rs`
 - Produces: `services.sync.engine.spaces` default `true` in release and Twilight (including Windows)
 
-- [ ] **Step 1: Update the design status to Approved**
+- [x] **Step 1: Update the design status to Approved**
 
 In `docs/superpowers/specs/2026-11-10-arc-sidebar-sync-design.md`, set `**Status:** Approved`.
 
-- [ ] **Step 2: Change the Spaces engine default pref**
+- [x] **Step 2: Change the Spaces engine default pref**
 
 Replace the Twilight-gated block in `prefs/zen/sync.yaml`:
 
@@ -74,7 +74,7 @@ Confirm generated prefs contain `pref("services.sync.engine.spaces", true);` wit
 
 If ffprefs cannot run in this environment, skip and rely on the YAML change + later browser test.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add prefs/zen/sync.yaml docs/superpowers/specs/2026-11-10-arc-sidebar-sync-design.md docs/superpowers/plans/2026-11-10-arc-sidebar-sync.md
